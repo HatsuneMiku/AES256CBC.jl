@@ -7,18 +7,18 @@ AES256CBC encryption with Salted__(8bytes) KEY(32bytes) IV(16bytes)
 
 # functions and KEY/IV
 
-'''
-  (key32, iv16) = genKey32Iv16(passwd, salt)
-    input:
-      passwd (any bytes) (from command line)
-      salt (8 bytes) (from Salted__????????)
-    process:
-      s1 = md5(passwd + salt)      (16 bytes)
-      s2 = md5(s1 + passwd + salt) (16 bytes)
-      s3 = md5(s2 + passwd + salt) (16 bytes)
-    output:
-      key32 = s1 + s2 (32 bytes)
-      iv16 = s3 (16 bytes)
+```julia
+# (key32, iv16) = genKey32Iv16(passwd, salt)
+#   input:
+#     passwd (any bytes) (from command line)
+#     salt (8 bytes) (from Salted__????????)
+#   process:
+#     s1 = md5(passwd + salt)      (16 bytes)
+#     s2 = md5(s1 + passwd + salt) (16 bytes)
+#     s3 = md5(s2 + passwd + salt) (16 bytes)
+#   output:
+#     key32 = s1 + s2 (32 bytes)
+#     iv16 = s3 (16 bytes)
 
 UBytes string2bytes(s::AbstractString)
 UBytes genRandUBytes(n::Int)
@@ -26,7 +26,7 @@ UBytes genRandUBytes(n::Int)
 UBytes genPadding(n::Int)
 UBytes encryptAES256CBC(key32::UBytes, iv16::UBytes, plain::UBytes)
 UBytes decryptAES256CBC(key32::UBytes, iv16::UBytes, cipher::UBytes)
-'''
+```
 
 
 # Encrypt/Decrypt
