@@ -1,3 +1,4 @@
+./.ref/
 *.jl.cov
 *.jl.*.cov
 *.jl.mem

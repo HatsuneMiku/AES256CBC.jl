@@ -1,4 +1,4 @@
 using AES256CBC
 using Base.Test
 
-@test 1 == 1
+include("aes256cbc_tests.jl")

@@ -5,12 +5,41 @@ AES256CBC
 
 AES256CBC encryption with Salted__(8bytes) KEY(32bytes) IV(16bytes)
 
-# Encrypt
+# functions and KEY/IV
+
+'''
+  (key32, iv16) = genKey32Iv16(passwd, salt)
+    input:
+      passwd (any bytes) (from command line)
+      salt (8 bytes) (from Salted__????????)
+    process:
+      s1 = md5(passwd + salt)      (16 bytes)
+      s2 = md5(s1 + passwd + salt) (16 bytes)
+      s3 = md5(s2 + passwd + salt) (16 bytes)
+    output:
+      key32 = s1 + s2 (32 bytes)
+      iv16 = s3 (16 bytes)
+
+UBytes string2bytes(s::AbstractString)
+UBytes genRandUBytes(n::Int)
+(UBytes, UBytes) genKey32Iv16(passwd::UBytes, salt::UBytes)
+UBytes genPadding(n::Int)
+UBytes encryptAES256CBC(key32::UBytes, iv16::UBytes, plain::UBytes)
+UBytes decryptAES256CBC(key32::UBytes, iv16::UBytes, cipher::UBytes)
+'''
+
+
+# Encrypt/Decrypt
 
 ```julia
-key32iv16 = GetKey32Iv16(Pwd::Array{UInt8, 1}, Salt::Array{UInt8, 1}) # Array{UInt8, 1}
-enc = Encrypt(Key32::Array{UInt8, 1}, Iv16::Array{UInt8, 1},
-  PlainText::Array{UInt8, 1}) # encripted Array{UInt8, 1}
+using AES256CBC
+# typealias UBytes Array{UInt8, 1}
+plain = string2bytes("Message") # UBytes
+passwd = string2bytes("Secret Passphrase") # UBytes
+salt = genRandUBytes(8) # UBytes
+(key32, iv16) = genKey32Iv16(passwd, salt) # (UBytes, UBytes)
+encoded = encryptAES256CBC(key32, iv16, plain) # UBytes
+decoded = decryptAES256CBC(key32, iv16, encoded) # UBytes
 ```
 
 
@@ -22,6 +51,7 @@ now supports 32bit
 # see also
 
 [WCharUTF8](https://github.com/HatsuneMiku/WCharUTF8.jl)
+
 [W32API](https://github.com/HatsuneMiku/W32API.jl)
 
 # status
