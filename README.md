@@ -54,6 +54,13 @@ now supports 32bit
 
 [W32API](https://github.com/HatsuneMiku/W32API.jl)
 
+[OpenSSL _dev_aes256cbc](https://github.com/HatsuneMiku/OpenSSL.jl/tree/_dev_aes256cbc)
+
+[OpenSSL](https://github.com/HatsuneMiku/OpenSSL.jl)
+
+[dirk OpenSSL](https://github.com/dirk/OpenSSL.jl)
+
+
 # status
 
 [![Build Status](https://travis-ci.org/HatsuneMiku/AES256CBC.jl.svg?branch=master)](https://travis-ci.org/HatsuneMiku/AES256CBC.jl)
