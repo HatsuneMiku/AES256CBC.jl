@@ -3,6 +3,7 @@
 VERSION >= v"0.4.0-dev+6521" && __precompile__()
 module AES256CBC
 
+import OpenSSL
 export UBytes
 export string2bytes, genRandUBytes, genKey32Iv16, genPadding
 export encryptAES256CBC, decryptAES256CBC
@@ -31,32 +32,12 @@ function genRandUBytes(n::Int)
 end
 
 function genKey32Iv16(passwd::UBytes, salt::UBytes)
-
-#  const EVP_MD *em = EVP_md5();
-#  const uint N = 3;
-#  ubyte[MD5_DIGEST_LENGTH] hash[N];
-#  for(uint i = 0; i < N; ++i){
-#    ubyte[] d = (i ? hash[i - 1] : []) ~ passwd ~ salt;
-#    uint outlen;
-#    int result = EVP_Digest(&d[0], d.length, &hash[i][0], &outlen, em, null);
-#  }
-#  key[] = hash[0] ~ hash[1]; // copied
-#  iv[] = hash[2]; // copied
-
-  return (
-    UBytes([
-### dummy data to pass test
-      0xe2, 0x99, 0xff, 0x9d, 0x8e, 0x48, 0x31, 0xf0,
-      0x7e, 0x53, 0x23, 0x91, 0x3c, 0x53, 0xe5, 0xf0,
-      0xfe, 0xc3, 0xa0, 0x40, 0xa2, 0x11, 0xd6, 0x56,
-      0x2f, 0xa4, 0x76, 0x07, 0x24, 0x4d, 0x00, 0x51,
-    ]),
-    UBytes([
-### dummy data to pass test
-      0x7c, 0x7e, 0xd9, 0x43, 0x4d, 0xdb, 0x9c, 0x2d,
-      0x1e, 0x1f, 0xcc, 0x38, 0xb4, 0xbf, 0x46, 0x67,
-    ]),
-  )
+  OpenSSL.Digest.init()
+  s1 = OpenSSL.Digest.digest("MD5", [passwd; salt])
+  s2 = OpenSSL.Digest.digest("MD5", [s1; passwd; salt])
+  s3 = OpenSSL.Digest.digest("MD5", [s2; passwd; salt])
+  OpenSSL.Digest.cleanup()
+  return ([s1; s2], s3) # (key32::UBytes, iv16::UBytes)
 end
 
 function genPadding(n::Int)
