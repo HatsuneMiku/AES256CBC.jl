@@ -5,6 +5,16 @@ AES256CBC
 
 AES256CBC encryption with Salted__(8bytes) KEY(32bytes) IV(16bytes)
 
+It requires bug fixed OpenSSL.jl (branch _dev_aes256cbc) .
+
+```julia
+Pkg.clone("https://github.com/HatsuneMiku/OpenSSL.jl/tree/_dev_aes256cbc")
+Pkg.test("OpenSSL")
+Pkg.clone("https://github.com/HatsuneMiku/AES256CBC.jl")
+Pkg.test("AES256CBC")
+```
+
+
 # functions and KEY/IV
 
 ```julia
