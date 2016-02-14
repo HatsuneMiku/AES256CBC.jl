@@ -27,8 +27,8 @@ function string2bytes(s::AbstractString)
 end
 
 function genRandUBytes(n::Int)
-### dummy data to pass test
-  return UBytes([0x53, 0x61, 0x6c, 0x74, 0x65, 0x64, 0x5f, 0x5f])
+  # srand()
+  return rand(UInt8(0):UInt8(255), n)
 end
 
 function genKey32Iv16(passwd::UBytes, salt::UBytes)
@@ -41,8 +41,7 @@ function genKey32Iv16(passwd::UBytes, salt::UBytes)
 end
 
 function genPadding(n::Int)
-### dummy data to pass test
-  return UBytes([9, 9, 9, 9, 9, 9, 9, 9, 9])
+  return UBytes(map(b -> n, 1:n))
 end
 
 function encryptAES256CBC(key32::UBytes, iv16::UBytes, plain::UBytes)

@@ -20,8 +20,16 @@ test_data = [
     "804bef7be79216196739de7845da182d", # last iv
   )]
 
-@test AES256CBC.string2bytes("abC") == Array{UInt8, 1}([0x61, 0x62, 0x43])
+@test AES256CBC.string2bytes("abC") == AES256CBC.UBytes([0x61, 0x62, 0x43])
+println(format("genPadding(0) == [{:s}]", AES256CBC.genPadding(0)))
+@test AES256CBC.genPadding(1) == AES256CBC.UBytes([1])
+@test AES256CBC.genPadding(5) == Array{UInt8, 1}([5, 5, 5, 5, 5])
 @test AES256CBC.genPadding(9) == Array{UInt8, 1}([9, 9, 9, 9, 9, 9, 9, 9, 9])
+println(format("genPadding(16) == [{:s}]", AES256CBC.genPadding(16)))
+salt = AES256CBC.genRandUBytes(8)
+println(format("genRandUBytes(8) == [{:s}]", bytes2hex(salt)))
+salt = AES256CBC.genRandUBytes(8)
+println(format("genRandUBytes(8) == [{:s}]", bytes2hex(salt)))
 salt = AES256CBC.genRandUBytes(8)
 println(format("genRandUBytes(8) == [{:s}]", bytes2hex(salt)))
 salt = hex2bytes(test_salt) # replace for test
