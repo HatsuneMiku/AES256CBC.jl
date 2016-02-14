@@ -32,11 +32,11 @@ function genRandUBytes(n::Int)
 end
 
 function genKey32Iv16(passwd::UBytes, salt::UBytes)
-  OpenSSL.Digest.init()
+  OpenSSL.init()
   s1 = OpenSSL.Digest.digest("MD5", [passwd; salt])
   s2 = OpenSSL.Digest.digest("MD5", [s1; passwd; salt])
   s3 = OpenSSL.Digest.digest("MD5", [s2; passwd; salt])
-  OpenSSL.Digest.cleanup()
+  OpenSSL.cleanup()
   return ([s1; s2], s3) # (key32::UBytes, iv16::UBytes)
 end
 
@@ -46,30 +46,17 @@ function genPadding(n::Int)
 end
 
 function encryptAES256CBC(key32::UBytes, iv16::UBytes, plain::UBytes)
-  OpenSSL.Cipher.init()
-
-### dummy padding to pass test
-  pad = length(plain) == 7 ? genPadding(9) : UBytes([16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16])
-
-  e = OpenSSL.Cipher.encrypt("aes_256_cbc", key32, iv16, [plain; pad])
-  OpenSSL.Cipher.cleanup()
+  OpenSSL.init()
+  e = OpenSSL.Cipher.encrypt("aes_256_cbc", key32, iv16, plain) # auto padding
+  OpenSSL.cleanup()
   return e
 end
 
 function decryptAES256CBC(key32::UBytes, iv16::UBytes, cipher::UBytes)
-
-### dummy data to pass test
-if(length(cipher) == 16)
-  return UBytes([
-    0x4D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
-  ])
-else
-  return UBytes([
-    0x4D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x09,
-    0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09, 0x09,
-  ])
-end
-
+  OpenSSL.init()
+  d = OpenSSL.Cipher.decrypt("aes_256_cbc", key32, iv16, cipher) # auto padding
+  OpenSSL.cleanup()
+  return d
 end
 
 end
