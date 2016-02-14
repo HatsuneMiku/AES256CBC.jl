@@ -33,7 +33,7 @@ println(format("key32[{:s}]\niv16[{:s}]", bytes2hex(key32), bytes2hex(iv16)))
 
 for (i, (test_plain, expected_enc, expected_liv)) in enumerate(test_data)
   println(i)
-  i == 1 && begin println("*** skip ***"); continue end # skip short test
+  # i == 1 && begin println("*** skip ***"); continue end # skip short test
 
   encoded = AES256CBC.encryptAES256CBC(key32, iv16,
     AES256CBC.string2bytes(test_plain))
