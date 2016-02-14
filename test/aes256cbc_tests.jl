@@ -1,7 +1,6 @@
 # aes256cbc_tests.jl
 
 import AES256CBC
-using Formatting
 using Base.Test
 
 test_pwd = "Secret Passphrase"
@@ -21,21 +20,21 @@ test_data = [
   )]
 
 @test AES256CBC.string2bytes("abC") == AES256CBC.UBytes([0x61, 0x62, 0x43])
-println(format("genPadding(0) == [{:s}]", AES256CBC.genPadding(0)))
+println(@sprintf "genPadding(0) == [%s]" AES256CBC.genPadding(0))
 @test AES256CBC.genPadding(1) == AES256CBC.UBytes([1])
 @test AES256CBC.genPadding(5) == Array{UInt8, 1}([5, 5, 5, 5, 5])
 @test AES256CBC.genPadding(9) == Array{UInt8, 1}([9, 9, 9, 9, 9, 9, 9, 9, 9])
-println(format("genPadding(16) == [{:s}]", AES256CBC.genPadding(16)))
+println(@sprintf "genPadding(16) == [%s]" AES256CBC.genPadding(16))
 salt = AES256CBC.genRandUBytes(8)
-println(format("genRandUBytes(8) == [{:s}]", bytes2hex(salt)))
+println(@sprintf "genRandUBytes(8) == [%s]" bytes2hex(salt))
 salt = AES256CBC.genRandUBytes(8)
-println(format("genRandUBytes(8) == [{:s}]", bytes2hex(salt)))
+println(@sprintf "genRandUBytes(8) == [%s]" bytes2hex(salt))
 salt = AES256CBC.genRandUBytes(8)
-println(format("genRandUBytes(8) == [{:s}]", bytes2hex(salt)))
+println(@sprintf "genRandUBytes(8) == [%s]" bytes2hex(salt))
 salt = hex2bytes(test_salt) # replace for test
-println(format("salt[{:s}]", bytes2hex(salt)))
+println(@sprintf "salt[%s]" bytes2hex(salt))
 (key32, iv16) = AES256CBC.genKey32Iv16(AES256CBC.string2bytes(test_pwd), salt)
-println(format("key32[{:s}]\niv16[{:s}]", bytes2hex(key32), bytes2hex(iv16)))
+println(@sprintf "key32[%s]\niv16[%s]" bytes2hex(key32) bytes2hex(iv16))
 @test key32 == hex2bytes(expected_k)
 @test iv16 == hex2bytes(expected_i)
 
@@ -45,11 +44,11 @@ for (i, (test_plain, expected_enc, expected_liv)) in enumerate(test_data)
 
   encoded = AES256CBC.encryptAES256CBC(key32, iv16,
     AES256CBC.string2bytes(test_plain))
-  println(format("encoded[{:s}]", bytes2hex(encoded)))
+  println(@sprintf "encoded[%s]" bytes2hex(encoded))
   @test encoded == hex2bytes(expected_enc)
   decoded = AES256CBC.decryptAES256CBC(key32, iv16, encoded)
-  println(format("decoded[{:s}]", bytes2hex(decoded)))
+  println(@sprintf "decoded[%s]" bytes2hex(decoded))
   @test decoded == AES256CBC.string2bytes(test_plain)
-  println(format("decoded[{:s}]", bytestring(decoded)))
+  println(@sprintf "decoded[%s]" bytestring(decoded))
   @test bytestring(decoded) == test_plain
 end
