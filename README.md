@@ -15,6 +15,26 @@ Pkg.test("AES256CBC")
 ```
 
 
+# development
+
+
+```julia
+julia> cd("~/work")
+# clone OpenSSL contains branch _dev_aes256cbc
+julia> ;git clone "https://github.com/HatsuneMiku/OpenSSL.jl"
+julia> cd("OpenSSL.jl")
+# checkout branch _dev_aes256cbc set up to track remote branch (from origin).
+julia> ;git checkout _dev_aes256cbc # must *NOT* set '-b' option
+# test it
+julia> Pkg.test("OpenSSL")
+julia> cd("..")
+julia> ;git clone "https://github.com/HatsuneMiku/AES256CBC.jl"
+julia> cd("AES256CBC.jl")
+julia> Pkg.test("AES256CBC")
+julia> cd("..")
+```
+
+
 # functions and KEY/IV
 
 ```julia
