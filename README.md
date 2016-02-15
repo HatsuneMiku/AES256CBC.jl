@@ -26,11 +26,11 @@ julia> cd("OpenSSL.jl")
 # checkout branch _dev_aes256cbc set up to track remote branch (from origin).
 julia> ;git checkout _dev_aes256cbc # must *NOT* set '-b' option
 # test it
-julia> Pkg.test("OpenSSL")
+julia> include("test/runtests.jl")
 julia> cd("..")
 julia> ;git clone "https://github.com/HatsuneMiku/AES256CBC.jl"
 julia> cd("AES256CBC.jl")
-julia> Pkg.test("AES256CBC")
+julia> include("test/runtests.jl")
 julia> cd("..")
 ```
 
